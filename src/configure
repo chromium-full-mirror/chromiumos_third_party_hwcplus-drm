@@ -1,0 +1,6 @@
+#! /bin/bash
+cat > config <<EOF
+PKG_CONFIG = $PKG_CONFIG
+LIBDIR = $LIBDIR
+CHOST = $CHOST
+EOF

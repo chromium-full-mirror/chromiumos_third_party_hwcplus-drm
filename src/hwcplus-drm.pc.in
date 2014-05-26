@@ -1,0 +1,10 @@
+prefix=/usr
+exec_prefix=${prefix}
+libdir=/usr/@LIBDIR@
+includedir=${prefix}/include
+
+Name: libgralloc_drm
+Description: drm-based implemention of hwcplus
+Version: 0.1
+Libs: -L${libdir} -lgralloc_drm
+Cflags: -I${includedir} -I${includedir}/hwcplus-drm

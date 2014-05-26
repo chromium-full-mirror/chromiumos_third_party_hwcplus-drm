@@ -1,0 +1,12 @@
+$(warning **)
+$(warning ** USING PRE-PACKAGED CONFIGURATION.  You should edit 'config' to meet your needs.)
+$(warning **)
+
+# change 'lumpy' to your board name
+PKG_CONFIG = pkg-config-lumpy
+
+# are libraries in /usr/lib or /usr/lib64?
+LIBDIR = lib64
+
+# cross compilation target
+CHOST = x86_64-cros-linux-gnu
