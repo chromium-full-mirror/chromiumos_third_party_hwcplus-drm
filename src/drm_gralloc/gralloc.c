@@ -29,6 +29,10 @@
 #include <pthread.h>
 #include <errno.h>
 
+#ifndef CHROMEOS
+#include <GLES/gl.h>
+#endif
+
 #include "gralloc_drm.h"
 #include "gralloc_drm_priv.h"
 
@@ -261,15 +265,16 @@ static int drm_mod_post_fb0(struct framebuffer_device_t *fb,
 	return gralloc_drm_bo_post(bo);
 }
 
-#include <GLES/gl.h>
 static int drm_mod_composition_complete_fb0(struct framebuffer_device_t *fb)
 {
+#ifndef CHROMEOS
 	struct drm_module_t *dmod = (struct drm_module_t *) fb->common.module;
 
 	if (gralloc_drm_is_kms_pipelined(dmod->drm))
 		glFlush();
 	else
 		glFinish();
+#endif
 
 	return 0;
 }

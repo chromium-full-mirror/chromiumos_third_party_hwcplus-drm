@@ -44,7 +44,7 @@
 #define MI_BATCH_BUFFER_END         (0x0a << 23)
 #define MI_FLUSH                    (0x04 << 23)
 #define MI_FLUSH_DW                 (0x26 << 23)
-#define MI_WRITE_DIRTY_STATE        (1 << 4) 
+#define MI_WRITE_DIRTY_STATE        (1 << 4)
 #define MI_INVALIDATE_MAP_CACHE     (1 << 0)
 #define XY_SRC_COPY_BLT_CMD         ((2 << 29) | (0x53 << 22) | 6)
 #define XY_SRC_COPY_BLT_WRITE_ALPHA (1 << 21)

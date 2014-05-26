@@ -24,7 +24,9 @@
 #define LOG_TAG "GRALLOC-DRM"
 
 #include <cutils/log.h>
+#ifdef ANDROID
 #include <cutils/atomic.h>
+#endif
 #include <stdlib.h>
 #include <errno.h>
 #include <sys/types.h>
@@ -46,7 +48,11 @@ static int32_t gralloc_drm_pid = 0;
 static int gralloc_drm_get_pid(void)
 {
 	if (unlikely(!gralloc_drm_pid))
+#ifdef ANDROID
 		android_atomic_write((int32_t) getpid(), &gralloc_drm_pid);
+#else
+		gralloc_drm_pid = getpid();
+#endif
 
 	return gralloc_drm_pid;
 }
@@ -211,7 +217,7 @@ static struct gralloc_drm_bo_t *validate_handle(buffer_handle_t _handle,
 		}
 
 		handle->data_owner = gralloc_drm_get_pid();
-		handle->data = (int) bo;
+		handle->data = (intptr_t) bo;
 	}
 
 	return (struct gralloc_drm_bo_t *) handle->data;
@@ -296,7 +302,7 @@ struct gralloc_drm_bo_t *gralloc_drm_bo_create(struct gralloc_drm_t *drm,
 	bo->refcount = 1;
 
 	handle->data_owner = gralloc_drm_get_pid();
-	handle->data = (int) bo;
+	handle->data = (intptr_t) bo;
 
 	return bo;
 }

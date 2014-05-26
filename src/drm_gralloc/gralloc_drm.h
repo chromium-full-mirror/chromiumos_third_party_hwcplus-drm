@@ -27,6 +27,10 @@
 #include <hardware/gralloc.h>
 #include <system/graphics.h>
 
+#ifndef ANDROID
+#include <vendor/gralloc_drm_defs.h>
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif

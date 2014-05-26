@@ -34,7 +34,9 @@
 #include <math.h>
 #include "gralloc_drm.h"
 #include "gralloc_drm_priv.h"
+#ifndef CHROMEOS
 #include <hardware_legacy/uevent.h>
+#endif
 
 #include <drm_fourcc.h>
 
@@ -998,6 +1000,7 @@ static void init_hdmi_output(struct gralloc_drm_t *drm,
 /*
  * Thread that listens to uevents and checks if hdmi state changes
  */
+#ifndef CHROMEOS
 static void *hdmi_observer(void *data)
 {
 	static char uevent_desc[4096];
@@ -1069,6 +1072,7 @@ static void *hdmi_observer(void *data)
 	pthread_exit(NULL);
 	return 0;
 }
+#endif
 
 
 /*
@@ -1169,7 +1173,15 @@ int gralloc_drm_init_kms(struct gralloc_drm_t *drm)
 goto skip_hdmi_modes;
 	/* launch hdmi observer thread */
 	pthread_mutex_init(&drm->hdmi_mutex, NULL);
+#ifndef CHROMEOS
 	pthread_create(&drm->hdmi_hotplug_thread, NULL, hdmi_observer, drm);
+#else
+	/*
+	 * TODO: support plug/unplug of HDMI and DP.
+	 * Chrome OS probably catches those events already via libudev,
+	 * if so we just need to inject them here for additional handling.
+	 */
+#endif
 
 skip_hdmi_modes:
 
