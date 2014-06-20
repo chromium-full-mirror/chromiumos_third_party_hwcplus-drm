@@ -1,3 +1,7 @@
+# Copyright 2014 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
 $(warning **)
 $(warning ** USING PRE-PACKAGED CONFIGURATION.  You should edit 'config' to meet your needs.)
 $(warning **)
@@ -8,5 +12,6 @@ PKG_CONFIG = pkg-config-lumpy
 # are libraries in /usr/lib or /usr/lib64?
 LIBDIR = lib64
 
-# cross compilation target
-CHOST = x86_64-cros-linux-gnu
+# cross compilers
+CC = x86_64-cros-linux-gnu-gcc
+CXX = x86_64-cros-linux-gnu-g++

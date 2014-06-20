@@ -1,8 +1,13 @@
+# Copyright 2014 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
 include config
 
 HWC_HDR = $(shell $(PKG_CONFIG) --cflags hwcplus)
 # uncomment to use local source instead instead of installed headers
 #HWC_HDR = -I$(HOME)/chrome_root/src/third_party/hwcplus/include
+#HWC_HDR = -I../../../../chromium/src/third_party/hwcplus/include
 
 LIB_HWCPLUS   = $(shell $(PKG_CONFIG) --libs hwcplus)
 LIB_DRM_INTEL = $(shell $(PKG_CONFIG) --libs libdrm_intel)
@@ -35,31 +40,24 @@ LIBDEST=$(DESTDIR)/usr/$(LIBDIR)
 HALDEST=$(LIBDEST)/hwcplus
 PKGDEST=$(LIBDEST)/pkgconfig
 
-CC = $(CHOST)-gcc
-CXX = $(CHOST)-g++
-
 CFLAGS += $(INC) -fPIC
 CFLAGS += -DCHROMEOS -DANDROID_SMP=0 -DENABLE_INTEL -DHAVE_SYS_UIO_H
-CFLAGS += -O0 -g
 CXXFLAGS := $(CFLAGS)
 CFLAGS += -std=gnu99
 
-all: libgralloc_drm.so gralloc.default.so hwcplus-drm.pc tests/rings-gralloc
+all: libgralloc_drm.so gralloc.default.so tests/rings-gralloc
 
 gralloc.default.so: $(GRALLOC_OBJ) libgralloc_drm.so
-	$(CC) -shared -o $@ $^
+	$(CC) $(CFLAGS) $(LDFLAGS) -shared -o $@ $^
 
 libgralloc_drm.so: $(LIBGRALLOC_DRM_OBJ)
-	$(CC) -shared -o $@ $^ $(LIB_DRM_INTEL) -lm
+	$(CC) $(CFLAGS) $(LDFLAGS) -shared -o $@ $^ $(LIB_DRM_INTEL) -lm
 
 tests/rings-gralloc: tests/rings-gralloc.c
-	$(CC) $(CFLAGS) -o $@ $^ -L. $(LIB_HWCPLUS) -lm -ldl
-
-hwcplus-drm.pc: hwcplus-drm.pc.in
-	sed -e "s/@LIBDIR@/$(LIBDIR)/" < $^ > $@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -o $@ $^ -L. $(LIB_HWCPLUS) -lm -ldl
 
 clean:
-	rm -f $(OBJ) hwcplus-drm.pc libgralloc_drm.so gralloc.default.so tests/rings-gralloc
+	rm -f $(OBJ) libgralloc_drm.so gralloc.default.so tests/rings-gralloc
 
 install:
 	install -d $(INCDEST)

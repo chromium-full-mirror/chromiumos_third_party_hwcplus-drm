@@ -1,6 +1,13 @@
 #! /bin/bash
+# Copyright 2014 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
 cat > config <<EOF
 PKG_CONFIG = $PKG_CONFIG
 LIBDIR = $LIBDIR
-CHOST = $CHOST
+CC = $CC
+CXX = $CXX
 EOF
+
+sed -e "s/@LIBDIR@/$LIBDIR/" hwcplus-drm.pc.in > hwcplus-drm.pc
